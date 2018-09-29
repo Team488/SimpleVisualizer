@@ -13,6 +13,17 @@
             "stopOnEntry": false,
             "mainClass": "xbot.roboreader.RobotReaderMain",
             "args": "",
+            "projectName": "RobotReader"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - RobotReaderMain",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "xbot.roboreader.RobotReaderMain",
+            "args": "",
             "projectName": "SimpleVisualizer"
         },
         {
