@@ -23,6 +23,8 @@ dependencies {
     compile 'edu.wpi.first.wpiutil:wpiutil-java:+'
     compile 'edu.wpi.first.ntcore:ntcore-java:+'
     compile 'edu.wpi.first.ntcore:ntcore-jni:+'
+
+    compile 'org.influxdb:influxdb-java:2.10'
 }
 
 task jarSources(type:Jar){

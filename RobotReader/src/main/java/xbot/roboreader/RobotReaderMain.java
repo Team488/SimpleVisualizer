@@ -1,5 +1,7 @@
 package xbot.roboreader;
 
+import org.influxdb.InfluxDBFactory;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -25,6 +27,8 @@ public class RobotReaderMain {
 
             System.out.println(entry.getString("no value yet"));
         }
+
+        //
 
     }
 }
