@@ -1,3 +1,6 @@
+i = 0; while :; do curl -i -XPOST 'http://localhost:8086/write?db=mydb' --data-binary "pos x=$((i % 400)),y=120,r=45 $( date +%s%N )" && i=$(expr $i + 1) && sleep 0.1; done
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
