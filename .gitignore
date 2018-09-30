@@ -24,7 +24,6 @@ hs_err_pid*
 
 .gradle
 .classpath
-#/build
 bin
 
 # dependencies
@@ -34,7 +33,7 @@ bin
 /coverage
 
 # production
-#/build
+/build
 
 # misc
 .DS_Store
