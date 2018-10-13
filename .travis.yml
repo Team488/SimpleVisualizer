@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - "stable"
+before_install: cd JSVisualizer
+cache:
+  directories:
+    - node_modules
+script:
+  - npm test
