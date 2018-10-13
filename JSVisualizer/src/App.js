@@ -3,13 +3,13 @@ import fieldImg from './field.jpg';
 import './App.css';
 
 
-const fieldXInches = 650;
-const fieldYInches = 320;
+const fieldXInches = 320;
+const fieldYInches = 650;
 
-const pixelsPerInche = fieldXInches / 800; // defines screen size of field
+const pixelsPerInche = fieldYInches / 800; // defines screen size of field
 
-const screenXPixels = fieldXInches / pixelsPerInche;
-const screenYPixels = fieldYInches / pixelsPerInche;
+const screenXPixels = fieldYInches / pixelsPerInche;
+const screenYPixels = fieldXInches / pixelsPerInche;
 
 const robotLengthInches = 36;
 const robotWidthInches = 24; 
@@ -28,8 +28,8 @@ function normalizeFieldPosition(position) {
 
 function normalizedToScreenPosition(position) {
 	return new Position(
-		position.x * screenXPixels,
-		position.y * screenYPixels,
+		position.x * screenYPixels,
+		position.y * screenXPixels,
 		position.heading
 	)
 }
@@ -85,8 +85,8 @@ class Robot extends Component {
 		let robotWidth = robotWidthInches / pixelsPerInche;
 		let robotLength = robotLengthInches / pixelsPerInche;
 
-		let x = this.props.position.x - robotLength / 2.0; // center inside 0,0
-		let y = this.props.position.y - robotWidth / 2.0;
+		let x = this.props.position.y - robotLength / 2.0; // center inside 0,0
+		let y = this.props.position.x - robotWidth / 2.0;
 
 		return (
 			<div className="robot" style={
@@ -96,7 +96,9 @@ class Robot extends Component {
 					width: robotLength,
 					height: robotWidth,
 					transform: 'translate(' + x + 'px, ' + y + 'px) rotate(' + rotation + 'deg)',
-				}}></div>
+				}}>
+					<div className="robot-front"></div>
+				</div>
 		);
 	}
 }
