@@ -80,7 +80,7 @@ class App extends Component {
 class Robot extends Component {
 
 	render() {
-		let rotation = this.props.position.heading;
+		let rotation = -1 * (this.props.position.heading - 90);
 
 		let robotWidth = robotWidthInches / pixelsPerInche;
 		let robotLength = robotLengthInches / pixelsPerInche;
