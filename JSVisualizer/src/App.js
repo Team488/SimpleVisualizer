@@ -48,7 +48,7 @@ class App extends Component {
 		fetch('http://localhost:8086/query?db=RobotPose&q=select X,Y,Heading from Pose ORDER BY DESC LIMIT 1')
 			.then(response => response.json())
 			.then(data => {
-				console.log(data);
+				// console.log(data);
 				this.setState({
 					position: new Position(
 						data.results[0].series[0].values[0][1],
