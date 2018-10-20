@@ -11,7 +11,7 @@ class Field extends Component {
 					width: this.props.screenXPixels,
 					height: this.props.screenYPixels
 				}}>
-					<img className="field-img" src={fieldImg}></img>
+					<img className="field-img" src={fieldImg} alt=""></img>
                     <Robot 
                         position={this.props.robotPosition} 
                         pixelsPerInche={this.props.pixelsPerInche}/>
