@@ -58,10 +58,6 @@ public class RobotReaderMain implements Callable<Void>{
         Thread.sleep(2000);
         System.out.println("Connection status: " +inst.isConnected());
 
-        netX.setDouble(10);
-        netY.setDouble(20);
-        netHeading.setDouble(45);
-
         System.out.println("Starting influxDb client...");
         InfluxDB idb = InfluxDBFactory.connect(fullInfluxAddress, "root", "root");
         Pong p = idb.ping();
