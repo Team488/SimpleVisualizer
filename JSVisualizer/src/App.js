@@ -45,7 +45,7 @@ class App extends Component {
 		this.timer = setInterval(() => this.getItems(), 100);
 	}
 	getItems() {
-		fetch('http://localhost:8086/query?db=mydb&q=select x,y,r from pos ORDER BY DESC LIMIT 1')
+		fetch('http://localhost:8086/query?db=RobotPose&q=select X,Y,Heading from Pose ORDER BY DESC LIMIT 1')
 			.then(response => response.json())
 			.then(data => {
 				console.log(data);
