@@ -27,7 +27,7 @@ public class RobotReaderMain implements Callable<Void>{
     private String influxDbServerAddress = "localhost";
 
     @Option(names = {"-refreshRateMs", "-r"}, description = {"50", "100", "1000"}, required = false)
-    private int refreshRateMs = 1000;
+    private int refreshRateMs = 50;
 
     @Option(names = {"-debug", "-d"}, description = {"Enable debug logging"}, required = false)
     private boolean debugLogging;
@@ -58,6 +58,10 @@ public class RobotReaderMain implements Callable<Void>{
         Thread.sleep(2000);
         System.out.println("Connection status: " +inst.isConnected());
 
+        netX.setDouble(10);
+        netY.setDouble(20);
+        netHeading.setDouble(45);
+
         System.out.println("Starting influxDb client...");
         InfluxDB idb = InfluxDBFactory.connect(fullInfluxAddress, "root", "root");
         Pong p = idb.ping();
@@ -75,8 +79,8 @@ public class RobotReaderMain implements Callable<Void>{
 
         idb.enableBatch();
         
-        for (int i = 0; i < 60; i++) {
-            Thread.sleep(1000);
+        while (true) {
+            Thread.sleep(refreshRateMs);
 
             if (debugLogging) {
                 System.out.println(netX.getDouble(0));
@@ -93,7 +97,5 @@ public class RobotReaderMain implements Callable<Void>{
 
             idb.flush();
         }
-
-        return null;
     }
 }
