@@ -8,14 +8,14 @@ cache:
 script:
 - npm test
 before_deploy:
-- npm run build
+- npm run build && zip build.zip build/
 deploy:
   provider: releases
+  prerelease: true
   skip_cleanup: true
   api_key:
     secure: dkTy80hKiaa8NxsSF/+74fT0B4wfn4717a0aucV364mWcki3gDKZwjga2kmzBAJcxiR0kYp6NKywBOE5z37Dvrj1bl4BTHm384DyXz0VsGVhcIqf0CIQqDjgluazb/cYHs2GGweFW7Vu/LPBpw47hNaxEK+EVseTddNq5Rzf4YMrJrGiXzJGRVEjIDQhthnKQThnFga6jOR15H/mrN9ql/vX2OmmwnnyR14aqDpZ+Cjsyxcd8XvtrRuESpJnv+5rzCm1JqPz9KSnZ0ijLqypmQ5KHv3szr1Ivrj0j3A82HT4ag5nqCoxn5OZs/finwaNKwQ8NX9rlD77dEsEcgoTd5h7Cf5/cf+R2eU3gDS3/8bA5KLEaImjrT12rTRD/T9U8y2s/KbpfxGbE4W5ga73z3u3/bd3YPMNU/0T/GOOLcL5LVwH/2iKW5M4YnVGyYn+nDOgGoeCRpIXAAU3jRrh5lUqKoU/ZVjBMQJTKmlcPAjJHmqoR/J7jsqomfqBv9Csf4VWakz6SZsKKVxQqhn3NTRgJxDple+zVboXm6r2VHq6b2QY1auX49KhzuT5H8W/vFLhFFvN6iyoOmXvMPwgC0pfTFIPRKWLuPsroJs2rM0+nEFmIPdpKdN+8z6f6Q8ZdBGeJNEsYPgMCWJZT4IJrvsq0GKve3n5M3KiX80yLd8=
-  file_glob: true
-  file: build/*
+  file: "build.zip"
   on:
     repo: Team488/SimpleVisualizer
     branch: js_release
