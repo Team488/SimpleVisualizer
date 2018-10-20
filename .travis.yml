@@ -19,4 +19,4 @@ deploy:
   file: "build.zip"
   on:
     repo: Team488/SimpleVisualizer
-    branch: js_release
+    tags: true
