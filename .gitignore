@@ -25,6 +25,7 @@ hs_err_pid*
 .gradle
 .classpath
 bin
+build/
 
 # dependencies
 /node_modules

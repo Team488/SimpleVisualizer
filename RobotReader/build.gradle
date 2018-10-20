@@ -1,5 +1,9 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'xbot.roboreader.RobotReaderMain'
+version = '1.0'
 
 repositories {
     // Use 'jcenter' for resolving your dependencies.
@@ -25,6 +29,8 @@ dependencies {
     compile 'edu.wpi.first.ntcore:ntcore-jni:+'
 
     compile 'org.influxdb:influxdb-java:2.10'
+
+    compile 'info.picocli:picocli:3.6.1'
 }
 
 task jarSources(type:Jar){
