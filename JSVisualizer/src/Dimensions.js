@@ -1,5 +1,3 @@
-import {Position} from './RobotData';
-
 const fieldXInches = 320;
 const fieldYInches = 650;
 
@@ -7,6 +5,12 @@ const pixelsPerInche = fieldYInches / 800; // defines screen size of field
 
 const screenXPixels = fieldYInches / pixelsPerInche;
 const screenYPixels = fieldXInches / pixelsPerInche;
+
+function Position(x, y, heading) {
+	this.x = x;
+	this.y = y;
+	this.heading = heading;
+}
 
 
 function normalizeFieldPosition(position) {
@@ -25,4 +29,4 @@ function normalizedToScreenPosition(position) {
 	)
 }
 
-export {fieldXInches, fieldYInches, screenXPixels, screenYPixels, pixelsPerInche, normalizeFieldPosition, normalizedToScreenPosition};
+export {Position, fieldXInches, fieldYInches, screenXPixels, screenYPixels, pixelsPerInche, normalizeFieldPosition, normalizedToScreenPosition};

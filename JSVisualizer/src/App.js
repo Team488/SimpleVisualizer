@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {Position} from './RobotData';
-import {screenXPixels, screenYPixels, pixelsPerInche, normalizeFieldPosition, normalizedToScreenPosition} from './Dimensions';
+import {Position, screenXPixels, screenYPixels, pixelsPerInche, normalizeFieldPosition, normalizedToScreenPosition} from './Dimensions';
+import {fetchLatestPosition} from './RobotData';
 import Field from './field';
 import './App.css';
 
@@ -16,23 +16,11 @@ class App extends Component {
 		this.timer = setInterval(() => this.getItems(), 100);
 	}
 	getItems() {
-		fetch('http://localhost:8086/query?db=RobotPose&q=select X,Y,Heading from Pose ORDER BY DESC LIMIT 1')
-			.then(response => response.json())
-			.then(data => {
-				// console.log(data);
-				try {
-					let newPosition = new Position(
-						data.results[0].series[0].values[0][1],
-						data.results[0].series[0].values[0][2],
-						data.results[0].series[0].values[0][3],
-					);
-					this.setState({
-						position: newPosition
-					});
-				} catch (exception) {
-					console.error("Failed to parse data from influx.")
-				}
+		fetchLatestPosition().then(newPosition => {
+			this.setState({
+				position: newPosition
 			});
+		});
 	}
 
 	render() {
