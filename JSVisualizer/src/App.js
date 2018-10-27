@@ -49,13 +49,18 @@ class App extends Component {
 			.then(response => response.json())
 			.then(data => {
 				// console.log(data);
-				this.setState({
-					position: new Position(
+				try {
+					let newPosition = new Position(
 						data.results[0].series[0].values[0][1],
 						data.results[0].series[0].values[0][2],
 						data.results[0].series[0].values[0][3],
-					)
-				});
+					);
+					this.setState({
+						position: newPosition
+					});
+				} catch (exception) {
+					console.error("Failed to parse data from influx.")
+				}
 			});
 	}
 
