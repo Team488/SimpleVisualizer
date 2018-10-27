@@ -12,6 +12,7 @@ before_deploy:
 deploy:
   provider: releases
   prerelease: true
+  overwrite: true
   skip_cleanup: true
   target_commitish: $TRAVIS_COMMIT
   api_key:
@@ -20,3 +21,4 @@ deploy:
   on:
     repo: Team488/SimpleVisualizer
     tags: true
+    
