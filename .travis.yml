@@ -8,7 +8,7 @@ cache:
 script:
 - npm test
 before_deploy:
-- npm run build && zip -r build.zip build/
+- ./build.sh
 deploy:
   provider: releases
   prerelease: true
