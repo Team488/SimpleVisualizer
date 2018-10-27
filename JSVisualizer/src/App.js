@@ -13,16 +13,24 @@ class App extends Component {
 		}
 	}
 	componentDidMount() {
-		this.timer = setInterval(() => this.getItems(), 100);
-	}
-	getItems() {
-		fetchLatestPosition().then(newPosition => {
+		this.timer = setInterval(() => this.step(), 100);
+		fetchLatestPositions().then(positions => {
 			this.setState({
-				position: newPosition
+				positions: positions,
+				positionIndex: 0
 			});
 		});
 	}
-
+	step() {
+		if(!this.state.positions) {
+			return;
+		}
+		let newIndex = (this.state.positionIndex + 1) % this.state.positions.length;
+		this.setState({
+			positionIndex: newIndex,
+			position: this.state.positions[newIndex]
+		})
+	}
 	render() {
 		let normalizedPosition = normalizeFieldPosition(this.state.position);
 		let screenPosition = normalizedToScreenPosition(normalizedPosition);

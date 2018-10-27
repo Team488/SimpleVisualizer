@@ -3,11 +3,6 @@ const Influx = require('influx');
 
 const dbName = 'RobotPose';
 
-function runQuery(query) {
-    return fetch(query)
-        .then(response => response.json());
-}
-
 function fetchLatestPosition() {
     const influx = new Influx.InfluxDB({
         database: dbName
@@ -36,6 +31,7 @@ function fetchLatestPositions() {
 
     return influx.query(`
         select * from Pose
+        ORDER BY DESC
         limit ${limit}
     `).then( (result) => {
         let positions = result.map(row => new Position(row.X, row.Y, row.Heading));
