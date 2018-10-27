@@ -1,38 +1,9 @@
 import React, { Component } from 'react';
-import Field from './field'
+import {Position} from './RobotData';
+import {screenXPixels, screenYPixels, pixelsPerInche, normalizeFieldPosition, normalizedToScreenPosition} from './Dimensions';
+import Field from './field';
 import './App.css';
 
-
-const fieldXInches = 320;
-const fieldYInches = 650;
-
-const pixelsPerInche = fieldYInches / 800; // defines screen size of field
-
-const screenXPixels = fieldYInches / pixelsPerInche;
-const screenYPixels = fieldXInches / pixelsPerInche;
-
-
-function normalizeFieldPosition(position) {
-	return new Position(
-		position.x / fieldXInches,
-		position.y / fieldYInches,
-		position.heading
-	)
-}
-
-function normalizedToScreenPosition(position) {
-	return new Position(
-		position.x * screenYPixels,
-		position.y * screenXPixels,
-		position.heading
-	)
-}
-
-function Position(x, y, heading) {
-	this.x = x;
-	this.y = y;
-	this.heading = heading;
-}
 
 class App extends Component {
 	constructor(props) {
