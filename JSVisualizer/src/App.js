@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Position, screenXPixels, screenYPixels, pixelsPerInche, normalizeFieldPosition, normalizedToScreenPosition} from './Dimensions';
-import {fetchLatestPosition} from './RobotData';
+import {fetchLatestPosition, fetchLatestPositions} from './RobotData';
 import Field from './field';
 import './App.css';
 

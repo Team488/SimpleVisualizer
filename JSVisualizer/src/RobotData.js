@@ -1,23 +1,50 @@
 import {Position} from './Dimensions';
+const Influx = require('influx');
 
+const dbName = 'RobotPose';
+
+function runQuery(query) {
+    return fetch(query)
+        .then(response => response.json());
+}
 
 function fetchLatestPosition() {
-    return fetch('http://localhost:8086/query?db=RobotPose&q=select X,Y,Heading from Pose ORDER BY DESC LIMIT 1')
-			.then(response => response.json())
-			.then(data => {
-				// console.log(data);
-				try {
-					let newPosition = new Position(
-						data.results[0].series[0].values[0][1],
-						data.results[0].series[0].values[0][2],
-						data.results[0].series[0].values[0][3],
-					);
-					return newPosition;
-				} catch (exception) {
-					console.error("Failed to parse data from influx.")
-				}
-			});
+    const influx = new Influx.InfluxDB({
+        database: dbName
+    });
+
+    return influx.query(`
+        select * from Pose
+        ORDER BY DESC
+        limit 1
+    `).then( (result) => {
+        var latest = result[0];
+        var pos = new Position(latest.X, latest.Y, latest.Heading);
+        return pos;
+    })
+    .catch( (error) => {
+        console.error("Failed to retrieve data from influx: " + error);
+    });
+}
+
+function fetchLatestPositions() {
+    const influx = new Influx.InfluxDB({
+        database: dbName
+    });
+
+    const limit = 500;
+
+    return influx.query(`
+        select * from Pose
+        limit ${limit}
+    `).then( (result) => {
+        let positions = result.map(row => new Position(row.X, row.Y, row.Heading));
+        return positions;
+    })
+    .catch( (error) => {
+        console.error("Failed to retrieve data from influx: " + error);
+    });
 }
 
 
-export {fetchLatestPosition};
+export {fetchLatestPosition, fetchLatestPositions};
