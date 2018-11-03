@@ -1,10 +1,18 @@
 import React from 'react';
 import App from './App';
+import { PlayBackState } from './PlayBack'
+import { Position } from './Dimensions';
+import { SessionData } from './RobotData';
+
 import { shallow } from 'enzyme';
 import * as RobotData from './RobotData';
 
 describe("<App>", () => {
-  const mock_fetch = jest.fn(() => Promise.resolve([]));
+  const points = [
+    new Position(0,0,0),
+    new Position(1, 1, 1)
+  ];
+  const mock_fetch = jest.fn(() => Promise.resolve(points));
   RobotData.fetchLatestPositions = mock_fetch;
 
   it('Shallow renders without crashing', () => {
@@ -18,8 +26,14 @@ describe("<App>", () => {
 
   it('Loads field with data', () => {
     const wrapper = shallow(<App />);
+    
+    const sessionData = new SessionData(points);
+    const pbs = new PlayBackState(sessionData);
+
     wrapper.setState({
-      isConnected: true
+      isConnected: true,
+      playbackState: pbs,
+      sessionData: sessionData
     });
     expect(wrapper.text()).not.toEqual(expect.stringContaining("Not connected to InfluxDB"));
   });

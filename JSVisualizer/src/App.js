@@ -1,44 +1,48 @@
 import React, { Component } from 'react';
 import {Position, screenXPixels, screenYPixels, pixelsPerInche, normalizeFieldPosition, normalizedToScreenPosition} from './Dimensions';
-import {fetchLatestPosition, fetchLatestPositions} from './RobotData';
+import {fetchLatestPosition, fetchLatestPositions, SessionData} from './RobotData';
 import Field from './field';
 import './App.css';
+import { PlayBackState } from './PlayBack';
 
 
 class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			position: new Position(0, 0, 0),
+			sessionData: null,
+			playbackState: null,
 			isConnected: false,
 		}
 	}
 	componentDidMount() {
 		this.timer = setInterval(() => this.step(), 100);
 		fetchLatestPositions().then(positions => {
+			const sessionData = new SessionData(positions);
+			const playbackState = new PlayBackState(sessionData);
+			playbackState.playing = true;
 			this.setState({
-				positions: positions,
-				positionIndex: 0,
+				sessionData: sessionData,
+				playbackState: playbackState,
 				isConnected: true
 			});
 		});
 	}
 	step() {
-		if(!this.state.positions) {
+		if(!this.state.isConnected) {
 			return;
 		}
-		let newIndex = (this.state.positionIndex + 1) % this.state.positions.length;
+		this.state.playbackState.tick();
 		this.setState({
-			positionIndex: newIndex,
-			position: this.state.positions[newIndex]
-		})
+			playbackState: this.state.playbackState
+		});
 	}
 	render() {
 		if(!this.state.isConnected) {
 			return <div>Not connected to InfluxDB</div>
 		}
 
-		let normalizedPosition = normalizeFieldPosition(this.state.position);
+		let normalizedPosition = normalizeFieldPosition(this.state.playbackState.currentPoint());
 		let screenPosition = normalizedToScreenPosition(normalizedPosition);
 		return (
 			<div className="App">
