@@ -3,6 +3,12 @@ const Influx = require('influx');
 
 const dbName = 'RobotPose';
 
+class SessionData {
+    constructor() {
+
+    }
+}
+
 function fetchLatestPosition() {
     const influx = new Influx.InfluxDB({
         database: dbName
@@ -39,6 +45,7 @@ function fetchLatestPositions() {
     })
     .catch( (error) => {
         console.error("Failed to retrieve data from influx: " + error);
+        throw error;
     });
 }
 

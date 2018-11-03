@@ -10,6 +10,7 @@ class App extends Component {
 		super(props);
 		this.state = {
 			position: new Position(0, 0, 0),
+			isConnected: false,
 		}
 	}
 	componentDidMount() {
@@ -17,7 +18,8 @@ class App extends Component {
 		fetchLatestPositions().then(positions => {
 			this.setState({
 				positions: positions,
-				positionIndex: 0
+				positionIndex: 0,
+				isConnected: true
 			});
 		});
 	}
@@ -32,6 +34,10 @@ class App extends Component {
 		})
 	}
 	render() {
+		if(!this.state.isConnected) {
+			return <div>Not connected to InfluxDB</div>
+		}
+
 		let normalizedPosition = normalizeFieldPosition(this.state.position);
 		let screenPosition = normalizedToScreenPosition(normalizedPosition);
 		return (
