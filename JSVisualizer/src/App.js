@@ -37,16 +37,26 @@ class App extends Component {
 			playbackState: this.state.playbackState
 		});
 	}
+	handlePlayPause() {
+		this.state.playbackState.togglePlaying();
+		this.setState({
+			playbackState: this.state.playbackState
+		});
+	}
 	render() {
 		if(!this.state.isConnected) {
 			return <div>Not connected to InfluxDB</div>
 		}
 
+
+
 		let normalizedPosition = normalizeFieldPosition(this.state.playbackState.currentPoint());
 		let screenPosition = normalizedToScreenPosition(normalizedPosition);
 		return (
 			<div className="App">
-				X is {screenPosition.x}
+				<div>
+					<PlayPauseButton onclick={() => this.handlePlayPause()}></PlayPauseButton>
+				</div>
 				<Field 
 					robotPosition={screenPosition} 
 					screenXPixels={screenXPixels} 
@@ -58,4 +68,11 @@ class App extends Component {
 	}
 }
 
+class PlayPauseButton extends Component {
+	render() {
+		return (<button onClick={this.props.onclick}>Toggle Playing</button>)
+	}
+}
+
 export default App;
+export { PlayPauseButton };

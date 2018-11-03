@@ -16,6 +16,9 @@ class PlayBackState {
             }
         }
     }
+    togglePlaying() {
+        this.playing = !this.playing;
+    }
     currentPoint() {
         return this.sessionData.points[this.currentIndex];
     }

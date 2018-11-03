@@ -36,6 +36,11 @@ describe("PlayBackState test", () => {
             pbs.tick();
             expect(pbs.currentIndex).toEqual(0);
         })
+
+        it("Plays when toggled", () => {
+            pbs.togglePlaying();
+            expect(pbs.playing).toEqual(true);
+        });
     });
 
     describe("When playing", () => {
@@ -50,6 +55,11 @@ describe("PlayBackState test", () => {
         it("Increments index on tick()", () => {
             pbs.tick();
             expect(pbs.currentIndex).toEqual(1);
+        });
+
+        it("Pauses when toggled", () => {
+            pbs.togglePlaying();
+            expect(pbs.playing).toEqual(false);
         });
     });
     

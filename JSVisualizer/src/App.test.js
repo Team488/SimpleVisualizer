@@ -1,5 +1,5 @@
 import React from 'react';
-import App from './App';
+import App, { PlayPauseButton } from './App';
 import { PlayBackState } from './PlayBack'
 import { Position } from './Dimensions';
 import { SessionData } from './RobotData';
@@ -39,3 +39,9 @@ describe("<App>", () => {
   });
 });
 
+describe("<PlayPauseButton>", () => {
+  it('Renders without crashing', () => {
+    const wrapper = shallow(<PlayPauseButton/>);
+
+  });
+});
