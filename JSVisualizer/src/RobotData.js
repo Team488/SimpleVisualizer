@@ -4,8 +4,8 @@ const Influx = require('influx');
 const dbName = 'RobotPose';
 
 class SessionData {
-    constructor() {
-
+    constructor(points) {
+        this.points = points;
     }
 }
 
