@@ -50,4 +50,4 @@ function fetchLatestPositions() {
 }
 
 
-export {fetchLatestPosition, fetchLatestPositions};
+export {fetchLatestPosition, fetchLatestPositions, SessionData};

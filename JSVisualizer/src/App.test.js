@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import App from './App';
 import { shallow } from 'enzyme';
 import * as RobotData from './RobotData';
@@ -15,6 +14,14 @@ describe("<App>", () => {
   it('Displays unconnected message', () => {
     const wrapper = shallow(<App />);
     expect(wrapper.text()).toEqual(expect.stringContaining("Not connected to InfluxDB"));
+  });
+
+  it('Loads field with data', () => {
+    const wrapper = shallow(<App />);
+    wrapper.setState({
+      isConnected: true
+    });
+    expect(wrapper.text()).not.toEqual(expect.stringContaining("Not connected to InfluxDB"));
   });
 });
 
