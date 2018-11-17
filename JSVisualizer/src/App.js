@@ -44,6 +44,12 @@ class App extends Component {
 			playbackState: this.state.playbackState
 		});
 	}
+	handlePercentChanged(newPercent) {
+		this.state.playbackState.seek(newPercent);
+		this.setState({
+			playbackState: this.state.playbackState
+		});
+	}
 	render() {
 		if(!this.state.isConnected) {
 			return <div>Not connected to InfluxDB</div>
@@ -54,7 +60,9 @@ class App extends Component {
 			<div className="App">
 				<div>
 					<PlayPauseButton playing={this.state.playbackState.playing} onclick={() => this.handlePlayPause()}></PlayPauseButton>
-					<SeekBar percent={this.state.playbackState.percent}></SeekBar>
+					<SeekBar 
+						percent={this.state.playbackState.percent} 
+						onPercentChanged={(newPercent) => this.handlePercentChanged(newPercent)}></SeekBar>
 				</div>
 				<Field 
 					robotPosition={screenPosition} 
