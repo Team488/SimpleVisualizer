@@ -61,6 +61,20 @@ describe("PlayBackState test", () => {
             pbs.togglePlaying();
             expect(pbs.playing).toEqual(false);
         });
+
+        describe("When on last index", () => {
+            beforeEach(() => {
+                pbs.currentIndex = points.length - 1;
+            });
+
+            it("Pauses when ticking", () => {
+                pbs.tick();
+                expect(pbs.playing).toEqual(false);
+                expect(pbs.currentIndex).toEqual(points.length - 1);
+            })
+        });
+
+        
     });
     
     describe("Seeking", () => {
