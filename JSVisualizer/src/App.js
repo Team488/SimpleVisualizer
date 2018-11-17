@@ -55,7 +55,7 @@ class App extends Component {
 		return (
 			<div className="App">
 				<div>
-					<PlayPauseButton onclick={() => this.handlePlayPause()}></PlayPauseButton>
+					<PlayPauseButton playing={this.state.playbackState.playing} onclick={() => this.handlePlayPause()}></PlayPauseButton>
 				</div>
 				<Field 
 					robotPosition={screenPosition} 
@@ -70,7 +70,11 @@ class App extends Component {
 
 class PlayPauseButton extends Component {
 	render() {
-		return (<button onClick={this.props.onclick}>Toggle Playing</button>)
+		let label = "Pause";
+		if(!this.props.playing) {
+			label = "Play";
+		}
+		return (<button onClick={this.props.onclick}>{label}</button>)
 	}
 }
 
