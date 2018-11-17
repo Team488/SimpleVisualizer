@@ -1,75 +1,62 @@
 import React, { Component } from 'react';
-import Field from './field'
+import {Position, screenXPixels, screenYPixels, pixelsPerInche, normalizeFieldPosition, normalizedToScreenPosition} from './Dimensions';
+import {fetchLatestPosition, fetchLatestPositions, SessionData} from './RobotData';
+import Field from './field';
 import './App.css';
+import { PlayBackState } from './PlayBack';
 
-
-const fieldXInches = 320;
-const fieldYInches = 650;
-
-const pixelsPerInche = fieldYInches / 800; // defines screen size of field
-
-const screenXPixels = fieldYInches / pixelsPerInche;
-const screenYPixels = fieldXInches / pixelsPerInche;
-
-
-function normalizeFieldPosition(position) {
-	return new Position(
-		position.x / fieldXInches,
-		position.y / fieldYInches,
-		position.heading
-	)
-}
-
-function normalizedToScreenPosition(position) {
-	return new Position(
-		position.x * screenYPixels,
-		position.y * screenXPixels,
-		position.heading
-	)
-}
-
-function Position(x, y, heading) {
-	this.x = x;
-	this.y = y;
-	this.heading = heading;
-}
 
 class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			position: new Position(0, 0, 0),
+			sessionData: null,
+			playbackState: null,
+			isConnected: false,
 		}
 	}
 	componentDidMount() {
-		this.timer = setInterval(() => this.getItems(), 100);
-	}
-	getItems() {
-		fetch('http://localhost:8086/query?db=RobotPose&q=select X,Y,Heading from Pose ORDER BY DESC LIMIT 1')
-			.then(response => response.json())
-			.then(data => {
-				// console.log(data);
-				try {
-					let newPosition = new Position(
-						data.results[0].series[0].values[0][1],
-						data.results[0].series[0].values[0][2],
-						data.results[0].series[0].values[0][3],
-					);
-					this.setState({
-						position: newPosition
-					});
-				} catch (exception) {
-					console.error("Failed to parse data from influx.")
-				}
+		this.timer = setInterval(() => this.step(), 100);
+		fetchLatestPositions().then(positions => {
+			const sessionData = new SessionData(positions);
+			const playbackState = new PlayBackState(sessionData);
+			playbackState.playing = true;
+			this.setState({
+				sessionData: sessionData,
+				playbackState: playbackState,
+				isConnected: true
 			});
+		});
 	}
-
+	step() {
+		if(!this.state.isConnected) {
+			return;
+		}
+		this.state.playbackState.tick();
+		this.setState({
+			playbackState: this.state.playbackState
+		});
+	}
+	handlePlayPause() {
+		this.state.playbackState.togglePlaying();
+		this.setState({
+			playbackState: this.state.playbackState
+		});
+	}
 	render() {
-		let normalizedPosition = normalizeFieldPosition(this.state.position);
+		if(!this.state.isConnected) {
+			return <div>Not connected to InfluxDB</div>
+		}
+
+
+
+		let normalizedPosition = normalizeFieldPosition(this.state.playbackState.currentPoint());
 		let screenPosition = normalizedToScreenPosition(normalizedPosition);
 		return (
 			<div className="App">
-				X is {screenPosition.x}
+				<div>
+					<PlayPauseButton onclick={() => this.handlePlayPause()}></PlayPauseButton>
+				</div>
 				<Field 
 					robotPosition={screenPosition} 
 					screenXPixels={screenXPixels} 
@@ -81,4 +68,11 @@ class App extends Component {
 	}
 }
 
+class PlayPauseButton extends Component {
+	render() {
+		return (<button onClick={this.props.onclick}>Toggle Playing</button>)
+	}
+}
+
 export default App;
+export { PlayPauseButton };
