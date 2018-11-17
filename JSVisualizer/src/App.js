@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Position, screenXPixels, screenYPixels, pixelsPerInche, normalizeFieldPosition, normalizedToScreenPosition} from './Dimensions';
 import {fetchLatestPosition, fetchLatestPositions, SessionData} from './RobotData';
+import {PlayPauseButton} from './transportControls';
 import Field from './field';
 import './App.css';
 import { PlayBackState } from './PlayBack';
@@ -47,9 +48,6 @@ class App extends Component {
 		if(!this.state.isConnected) {
 			return <div>Not connected to InfluxDB</div>
 		}
-
-
-
 		let normalizedPosition = normalizeFieldPosition(this.state.playbackState.currentPoint());
 		let screenPosition = normalizedToScreenPosition(normalizedPosition);
 		return (
@@ -65,16 +63,6 @@ class App extends Component {
 					/>
 			</div>
 		);
-	}
-}
-
-class PlayPauseButton extends Component {
-	render() {
-		let label = "Pause";
-		if(!this.props.playing) {
-			label = "Play";
-		}
-		return (<button onClick={this.props.onclick}>{label}</button>)
 	}
 }
 
