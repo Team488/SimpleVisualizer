@@ -16,11 +16,17 @@ class PlayBackState {
             }
         }
     }
+    get percent() {
+        return this.currentIndex / (this.sessionData.points.length - 1);
+    }
     togglePlaying() {
         this.playing = !this.playing;
     }
     currentPoint() {
         return this.sessionData.points[this.currentIndex];
+    }
+    seek(percent) {
+        this.currentIndex = Math.round((this.sessionData.points.length - 1) * percent);
     }
 }
 

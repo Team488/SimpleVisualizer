@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Position, screenXPixels, screenYPixels, pixelsPerInche, normalizeFieldPosition, normalizedToScreenPosition} from './Dimensions';
 import {fetchLatestPosition, fetchLatestPositions, SessionData} from './RobotData';
-import {PlayPauseButton} from './transportControls';
+import {PlayPauseButton, SeekBar} from './transportControls';
 import Field from './field';
 import './App.css';
 import { PlayBackState } from './PlayBack';
@@ -54,6 +54,7 @@ class App extends Component {
 			<div className="App">
 				<div>
 					<PlayPauseButton playing={this.state.playbackState.playing} onclick={() => this.handlePlayPause()}></PlayPauseButton>
+					<SeekBar percent={this.state.playbackState.percent}></SeekBar>
 				</div>
 				<Field 
 					robotPosition={screenPosition} 

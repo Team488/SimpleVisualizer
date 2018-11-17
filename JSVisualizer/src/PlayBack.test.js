@@ -23,15 +23,18 @@ describe("PlayBackState test", () => {
         expect(pbs.currentPoint()).toEqual(points[0]);
     });
 
-    describe("When not playing", () => {
-        const points = [
+    let points, sessionData, pbs;
+    beforeEach(() => {
+        points = [
             new Position(0,0,0),
             new Position(1, 1, 1)
         ];
-        const sessionData = new SessionData(points);
+        sessionData = new SessionData(points);
 
-        const pbs = new PlayBackState(sessionData);
-
+        pbs = new PlayBackState(sessionData);
+    });
+    
+    describe("When not playing", () => {
         it("Doesnt change index on tick()", () => {
             pbs.tick();
             expect(pbs.currentIndex).toEqual(0);
@@ -44,17 +47,14 @@ describe("PlayBackState test", () => {
     });
 
     describe("When playing", () => {
-        const points = [
-            new Position(0,0,0),
-            new Position(1, 1, 1)
-        ];
-        const sessionData = new SessionData(points);
+        beforeEach(() => {
+            pbs.playing = true;
+        });
 
-        const pbs = new PlayBackState(sessionData);
-        pbs.playing = true;
         it("Increments index on tick()", () => {
             pbs.tick();
             expect(pbs.currentIndex).toEqual(1);
+            expect(pbs.percent).toEqual(1.0);
         });
 
         it("Pauses when toggled", () => {
@@ -63,4 +63,35 @@ describe("PlayBackState test", () => {
         });
     });
     
+    describe("Seeking", () => {
+
+        beforeEach(() => {
+            points = [
+                new Position(0,0,0),
+                new Position(1, 1, 1),
+                new Position(2, 1, 1),
+                new Position(3, 1, 1),
+                new Position(5, 0, 0)
+            ];
+            sessionData = new SessionData(points);
+    
+            pbs = new PlayBackState(sessionData);
+        });
+        
+        it("Seeks to start", () => {
+            pbs.seek(0);
+            expect(pbs.currentIndex).toEqual(0);
+        });
+
+        it("Seeks to middle", () => {
+            pbs.seek(0.5);
+            expect(pbs.currentIndex).toEqual(2);
+        });
+
+        it("Seeks to middle", () => {
+            pbs.seek(1.0);
+            expect(pbs.currentIndex).toEqual(points.length - 1);
+        });
+    });
+
 });
