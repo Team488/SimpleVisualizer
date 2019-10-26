@@ -6,5 +6,12 @@ services:
       - 8086:8086
     volumes:
       - influxdata:/var/lib/influxdb
+  robot-reader:
+    build: RobotReader/
+    links: 
+      - influx
+    depends_on: 
+      - influx
+    command: -influxDbServerAddress influx
 volumes:
  influxdata:
