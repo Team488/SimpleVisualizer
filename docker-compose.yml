@@ -16,7 +16,7 @@ services:
   visualizer:
     build: JSVisualizer/
     ports:
-      - 8000:8000
+      - 9000:80
     links:
       - influx
     depends_on:
