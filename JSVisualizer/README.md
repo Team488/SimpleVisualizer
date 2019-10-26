@@ -1,5 +1,10 @@
-i = 0; while :; do curl -i -XPOST 'http://localhost:8086/write?db=RobotPose' --data-binary "Pose X=$((i % 400)),Y=120,Heading=45 $( date +%s%N )" && i=$(expr $i + 1) && sleep 0.1; done
+## Loading fake data into influxdb
 
+```
+i = 0; while :; do curl -i -XPOST 'http://localhost:8086/write?db=RobotPose' --data-binary "Pose,RobotSession='Alpha' X=$((i % 400)),Y=120,Heading=45 $( date +%s%N )" && i=$(expr $i + 1) && sleep 0.1; done
+```
+
+## Create-React-App
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 

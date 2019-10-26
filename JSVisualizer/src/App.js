@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Position, screenXPixels, screenYPixels, pixelsPerInche, normalizeFieldPosition, normalizedToScreenPosition} from './Dimensions';
 import {fetchLatestPosition, fetchLatestPositions, SessionData} from './RobotData';
+import {PlayPauseButton, SeekBar} from './transportControls';
 import Field from './field';
 import './App.css';
 import { PlayBackState } from './PlayBack';
@@ -43,19 +44,25 @@ class App extends Component {
 			playbackState: this.state.playbackState
 		});
 	}
+	handlePercentChanged(newPercent) {
+		this.state.playbackState.seek(newPercent);
+		this.setState({
+			playbackState: this.state.playbackState
+		});
+	}
 	render() {
 		if(!this.state.isConnected) {
 			return <div>Not connected to InfluxDB</div>
 		}
-
-
-
 		let normalizedPosition = normalizeFieldPosition(this.state.playbackState.currentPoint());
 		let screenPosition = normalizedToScreenPosition(normalizedPosition);
 		return (
 			<div className="App">
 				<div>
-					<PlayPauseButton onclick={() => this.handlePlayPause()}></PlayPauseButton>
+					<PlayPauseButton playing={this.state.playbackState.playing} onclick={() => this.handlePlayPause()}></PlayPauseButton>
+					<SeekBar 
+						percent={this.state.playbackState.percent} 
+						onPercentChanged={(newPercent) => this.handlePercentChanged(newPercent)}></SeekBar>
 				</div>
 				<Field 
 					robotPosition={screenPosition} 
@@ -65,12 +72,6 @@ class App extends Component {
 					/>
 			</div>
 		);
-	}
-}
-
-class PlayPauseButton extends Component {
-	render() {
-		return (<button onClick={this.props.onclick}>Toggle Playing</button>)
 	}
 }
 
