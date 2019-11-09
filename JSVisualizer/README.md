@@ -1,3 +1,9 @@
+## creating database
+
+```
+curl -XPOST 'http://localhost:8086/query' --data-urlencode 'q=CREATE DATABASE "RobotPose"'
+```
+
 ## Loading fake data into influxdb
 
 ```
