@@ -21,5 +21,10 @@ services:
       - influx
     depends_on:
       - influx
+  chronograf:
+    image: chronograf
+    command: --influxdb-url=http://influx:8086
+    ports:
+      - 9001:8888
 volumes:
  influxdata:

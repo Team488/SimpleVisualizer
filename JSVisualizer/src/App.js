@@ -34,9 +34,6 @@ class App extends Component {
 			return;
 		}
 		this.state.playbackState.tick();
-		this.setState({
-			playbackState: this.state.playbackState
-		});
 	}
 	handlePlayPause() {
 		this.state.playbackState.togglePlaying();

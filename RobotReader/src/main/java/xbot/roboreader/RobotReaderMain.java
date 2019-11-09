@@ -46,10 +46,12 @@ public class RobotReaderMain implements Callable<Void>{
         System.out.println("InfluxDB Address: " + fullInfluxAddress);
 
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
-        NetworkTable table = inst.getTable("SmartDashboard/PoseSubsystem");
-        NetworkTableEntry netX = table.getEntry("Total distance X");
-        NetworkTableEntry netY = table.getEntry("Total distance Y");
-        NetworkTableEntry netHeading = table.getEntry("CurrentHeading");
+        NetworkTable rootTable = inst.getTable("SmartDashboard");
+        NetworkTableEntry session = rootTable.getEntry("RobotSession");
+        NetworkTable poseSubsysteTable = inst.getTable("SmartDashboard/PoseSubsystem");
+        NetworkTableEntry netX = poseSubsysteTable.getEntry("Total distance X");
+        NetworkTableEntry netY = poseSubsysteTable.getEntry("Total distance Y");
+        NetworkTableEntry netHeading = poseSubsysteTable.getEntry("CurrentHeading");
         
 
         
@@ -79,19 +81,23 @@ public class RobotReaderMain implements Callable<Void>{
             Thread.sleep(refreshRateMs);
 
             if (debugLogging) {
+                System.out.println(inst.isConnected());
                 System.out.println(netX.getDouble(0));
                 System.out.println(netY.getDouble(0));
                 System.out.println(netHeading.getDouble(0));
             }
 
-            idb.write(poseDbName, poseDbRetentionPolicy, Point.measurement(poseDbMeasurement)
-            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-            .addField("X", netX.getDouble(0))
-            .addField("Y", netY.getDouble(0))
-            .addField("Heading", netHeading.getDouble(0))
-            .build());
+            if (inst.isConnected()) {
+                idb.write(poseDbName, poseDbRetentionPolicy, Point.measurement(poseDbMeasurement)
+                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .tag("Session", session.getString("NoSessionSetYet"))
+                .addField("X", netX.getDouble(0))
+                .addField("Y", netY.getDouble(0))
+                .addField("Heading", netHeading.getDouble(0))
+                .build());
 
-            idb.flush();
+                idb.flush();
+            }
         }
     }
 }
