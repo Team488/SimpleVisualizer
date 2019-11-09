@@ -78,7 +78,7 @@ public class RobotReaderMain implements Callable<Void>{
         idb.enableBatch();
         
         while (true) {
-            Thread.sleep(refreshRateMs);
+            String currentSession = session.getString("NoSessionSetYet");
 
             if (debugLogging) {
                 System.out.println(inst.isConnected());
@@ -87,10 +87,11 @@ public class RobotReaderMain implements Callable<Void>{
                 System.out.println(netHeading.getDouble(0));
             }
 
-            if (inst.isConnected()) {
+            if (inst.isConnected() && currentSession != "NoSessionSetYet") {
+                
                 idb.write(poseDbName, poseDbRetentionPolicy, Point.measurement(poseDbMeasurement)
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .tag("Session", session.getString("NoSessionSetYet"))
+                .tag("Session", currentSession)
                 .addField("X", netX.getDouble(0))
                 .addField("Y", netY.getDouble(0))
                 .addField("Heading", netHeading.getDouble(0))
@@ -98,6 +99,8 @@ public class RobotReaderMain implements Callable<Void>{
 
                 idb.flush();
             }
+
+            Thread.sleep(refreshRateMs);
         }
     }
 }
