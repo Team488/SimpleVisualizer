@@ -32,6 +32,7 @@ public class RobotReaderMain implements Callable<Void>{
     @Option(names = {"-debug", "-d"}, description = {"Enable debug logging"}, required = false)
     private boolean debugLogging;
 
+    private Boolean isConnected;
 
     public static void main(String args[]) throws InterruptedException
     {
@@ -46,6 +47,10 @@ public class RobotReaderMain implements Callable<Void>{
         System.out.println("InfluxDB Address: " + fullInfluxAddress);
 
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        isConnected = inst.isConnected();
+        inst.addConnectionListener(notification -> {
+            isConnected = notification.connected;
+          }, false);
         NetworkTable rootTable = inst.getTable("SmartDashboard");
         NetworkTableEntry session = rootTable.getEntry("RobotSession");
         NetworkTable poseSubsysteTable = inst.getTable("SmartDashboard/PoseSubsystem");

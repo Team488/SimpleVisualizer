@@ -13,6 +13,8 @@ services:
     depends_on: 
       - influx
     command: -influxDbServerAddress influx
+    volumes:
+      - gradlecache:/home/gradle/.gradle
   visualizer:
     build: JSVisualizer/
     ports:
@@ -28,3 +30,4 @@ services:
       - 9001:8888
 volumes:
  influxdata:
+ gradlecache:
