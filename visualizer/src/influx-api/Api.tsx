@@ -1,5 +1,6 @@
 import { InfluxDB } from 'influx';
 import Session from '../model/Session';
+import PosePoint from '../model/PosePoint';
 
 const dbName = 'RobotPose';
 
@@ -62,7 +63,21 @@ export default class Api {
             // sort descending
             return sessionB.startDateTime.getTime() - sessionA.startDateTime.getTime();
         });
+    }
 
+    async getPointsForSession(sessionName: string): Promise<PosePoint[]> {
+        const results = await this.influx.query(`
+            SELECT X, Y, Heading 
+            FROM Pose
+            WHERE Session = '${sessionName}'
+            ORDER BY ASC
+        `);
+        return results.map((result: any) => ({
+            x: result.X,
+            y: result.Y,
+            heading: result.Heading,
+            time: result.time
+        }));
     }
 
 }

@@ -1,13 +1,15 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import Session from '../model/Session';
 import { sessionReducer } from './reducers';
+import PosePoint from '../model/PosePoint';
 
 // this style of state management was taken from:
 // https://medium.com/simply/state-management-with-react-hooks-and-context-api-at-10-lines-of-code-baf6be8302c
 
 export interface State {
   sessions: Session[],
-  currentSession?: Session
+  currentSession?: Session,
+  posePoints?: PosePoint[]
 }
 
 const initialState: State = {
