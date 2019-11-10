@@ -1,24 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// import logo from './assets/logo.svg';
+// import './App.css';
+import { StateProvider, useStateValue } from './stores/StateContext';
 
 const App: React.FC = () => {
+  const [ { sessions }, dispatch] = useStateValue();
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        Header
       </header>
+      <SessionList />
+    </div>
+  );
+}
+
+const SessionList: React.FC = () => {
+  const [ { sessions }, dispatch] = useStateValue();
+  return (
+    <div>
+      Session List
+      <button onClick={() => {
+        dispatch({type: 'createSession', payload: { name: 'new session'}})
+      }}>Add session</button>
+      <ul>
+        {sessions.map(session => {
+          return (
+            <li key={session.name}>{session.name}</li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
