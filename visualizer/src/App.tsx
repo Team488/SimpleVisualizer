@@ -3,6 +3,7 @@ import React from 'react';
 // import './App.css';
 import { StateProvider, useStateValue } from './stores/StateContext';
 import Api from './influx-api/Api';
+import { getDuration } from './model/Session';
 
 const api = new Api();
 
@@ -31,13 +32,10 @@ const SessionList: React.FC = () => {
   return (
     <div>
       Session List
-      <button onClick={() => {
-        dispatch({type: 'createSession', payload: { name: 'new session'}})
-      }}>Add session</button>
       <ul>
         {sessions.map(session => {
           return (
-            <li key={session.name}>{session.name}</li>
+            <li key={session.name}>{session.name} - {session.startDateTime.toLocaleString()} - {getDuration(session)}s</li>
           );
         })}
       </ul>

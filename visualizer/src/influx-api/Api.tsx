@@ -39,7 +39,7 @@ export default class Api {
             GROUP BY "Session"
         `);
         const starts = new Map(startResults.map((result: any) => {
-            return [result.Session as string, result.time as string];
+            return [result.Session as string, result.time as Date];
         }));
 
         const endResults = await this.influx.query(`
@@ -48,7 +48,7 @@ export default class Api {
             GROUP BY "Session"
         `);
         const ends = new Map(endResults.map((result: any) => {
-            return [result.Session as string, result.time as string];
+            return [result.Session as string, result.time as Date];
         }));
 
         // join results together to create final list of Sessions
@@ -56,8 +56,11 @@ export default class Api {
             return {
                 name: session,
                 startDateTime: start,
-                endDateTime: ends.get(session) as string
+                endDateTime: ends.get(session) as Date
             };
+        }).sort((sessionA, sessionB) => {
+            // sort descending
+            return sessionB.startDateTime.getTime() - sessionA.startDateTime.getTime();
         });
 
     }
