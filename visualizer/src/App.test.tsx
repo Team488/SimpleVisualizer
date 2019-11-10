@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { StateProvider } from './stores/StateContext';
+import { StateProvider } from './state/StateContext';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

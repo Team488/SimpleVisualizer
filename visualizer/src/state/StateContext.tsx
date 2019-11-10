@@ -6,7 +6,8 @@ import { sessionReducer } from './reducers';
 // https://medium.com/simply/state-management-with-react-hooks-and-context-api-at-10-lines-of-code-baf6be8302c
 
 export interface State {
-  sessions: Session[]
+  sessions: Session[],
+  currentSession?: Session
 }
 
 const initialState: State = {

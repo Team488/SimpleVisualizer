@@ -1,9 +1,10 @@
 import React from 'react';
 // import logo from './assets/logo.svg';
 // import './App.css';
-import { StateProvider, useStateValue } from './stores/StateContext';
+import { StateProvider, useStateValue } from './state/StateContext';
 import Api from './influx-api/Api';
 import { getDuration } from './model/Session';
+import SessionSelector from './components/SessionSelector';
 
 const api = new Api();
 
@@ -22,23 +23,7 @@ const App: React.FC = () => {
       <header className="App-header">
         Header
       </header>
-      <SessionList />
-    </div>
-  );
-}
-
-const SessionList: React.FC = () => {
-  const [ { sessions }, dispatch] = useStateValue();
-  return (
-    <div>
-      Session List
-      <ul>
-        {sessions.map(session => {
-          return (
-            <li key={session.name}>{session.name} - {session.startDateTime.toLocaleString()} - {getDuration(session)}s</li>
-          );
-        })}
-      </ul>
+      <SessionSelector />
     </div>
   );
 }
