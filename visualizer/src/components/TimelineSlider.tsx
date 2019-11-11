@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStateValue } from '../state/StateContext';
+import DurationMarker from './DurationMarker';
 
 const TimelineSlider: React.FC = () => {
     const [ { posePoints, playbackIndex }, dispatch ] = useStateValue();
@@ -20,6 +21,7 @@ const TimelineSlider: React.FC = () => {
                     max={posePoints.length - 1} 
                     value={playbackIndex}
                     onChange={handleOnChange} />
+            <DurationMarker />
         </div>
     );
 }
