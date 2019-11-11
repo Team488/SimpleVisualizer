@@ -6,6 +6,7 @@ import Api from './influx-api/Api';
 import { getDuration } from './model/Session';
 import SessionSelector from './components/SessionSelector';
 import RawPosePoints from './components/RawPosePoints';
+import TimelineSlider from './components/TimelineSlider';
 
 const api = new Api();
 
@@ -37,6 +38,7 @@ const App: React.FC = () => {
         Visualizer
       </header>
       <SessionSelector />
+      <TimelineSlider />
       <RawPosePoints />
     </div>
   );

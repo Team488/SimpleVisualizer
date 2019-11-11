@@ -2,18 +2,24 @@ import { useStateValue } from "../state/StateContext";
 import React from 'react';
 
 const RawPosePoints: React.FC = () => {
-    const [ { posePoints }, _ ] = useStateValue();
+    const [ { posePoints, playbackIndex }, _ ] = useStateValue();
     if (!posePoints) {
         return null;
     }
+    const currentPoint = posePoints[playbackIndex];
+    const currentPoints = posePoints.slice(playbackIndex, playbackIndex + 100);
     return (
-        <ul>
-            {posePoints.map(point => (
-                <li key={point.time.getTime()}>
-                    Heading: {point.heading}
-                </li>
-            ))}
-        </ul>
+        <div>
+            <h3>{posePoints.length} points</h3>
+            <div>Current point: Heading: {currentPoint.heading}</div>
+            <ul>
+                {currentPoints.map(point => (
+                    <li key={point.time.getTime()}>
+                        Heading: {point.heading}
+                    </li>
+                ))}
+            </ul>
+        </div>
     );
 };
 

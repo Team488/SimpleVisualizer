@@ -9,11 +9,13 @@ import PosePoint from '../model/PosePoint';
 export interface State {
   sessions: Session[],
   currentSession?: Session,
-  posePoints?: PosePoint[]
+  posePoints?: PosePoint[],
+  playbackIndex: number
 }
 
 const initialState: State = {
-  sessions: []
+  sessions: [],
+  playbackIndex: 0
 }
 
 export interface Action {
