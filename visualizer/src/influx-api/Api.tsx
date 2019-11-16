@@ -22,7 +22,8 @@ export default class Api {
     // For live tailing the robot
     async fetchLatestPosition() {
         return this.influx.query(`
-            select X, Y, Heading from Pose
+            select X, Y, Heading 
+            from "RobotPoseRetentionPolicy"."Pose"
             ORDER BY DESC
             limit 1
         `).then( (results) => {
@@ -36,7 +37,7 @@ export default class Api {
         const commonMeasurement = 'X'; // needs to be on every event we care about
         const startResults = await this.influx.query(`
             SELECT first(${commonMeasurement}), time 
-            FROM "Pose" 
+            FROM "RobotPoseRetentionPolicy"."Pose"
             GROUP BY "Session"
         `);
         const starts = new Map(startResults.map((result: any) => {
@@ -45,7 +46,7 @@ export default class Api {
 
         const endResults = await this.influx.query(`
             SELECT last(${commonMeasurement}), time 
-            FROM "Pose" 
+            FROM "RobotPoseRetentionPolicy"."Pose"
             GROUP BY "Session"
         `);
         const ends = new Map(endResults.map((result: any) => {
@@ -68,7 +69,7 @@ export default class Api {
     async getPointsForSession(sessionName: string): Promise<PosePoint[]> {
         const results = await this.influx.query(`
             SELECT X, Y, Heading 
-            FROM Pose
+            FROM "RobotPoseRetentionPolicy"."Pose"
             WHERE Session = '${sessionName}'
             ORDER BY ASC
         `);

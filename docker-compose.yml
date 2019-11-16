@@ -12,7 +12,7 @@ services:
       - influx
     depends_on: 
       - influx
-    command: -influxDbServerAddress influx
+    command: -influxDbServerAddress influx -d
   visualizer:
     build: JSVisualizer/
     ports:
