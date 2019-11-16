@@ -14,7 +14,7 @@ services:
       - influx
     command: -influxDbServerAddress influx
   visualizer:
-    build: JSVisualizer/
+    build: visualizer/
     ports:
       - 9000:80
     links:
@@ -26,5 +26,7 @@ services:
     command: --influxdb-url=http://influx:8086
     ports:
       - 9001:8888
+    depends_on:
+      - influx
 volumes:
  influxdata:

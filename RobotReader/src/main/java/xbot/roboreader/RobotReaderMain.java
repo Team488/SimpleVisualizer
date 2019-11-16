@@ -82,6 +82,7 @@ public class RobotReaderMain implements Callable<Void>{
 
             if (debugLogging) {
                 System.out.println(inst.isConnected());
+                System.out.println(currentSession);
                 System.out.println(netX.getDouble(0));
                 System.out.println(netY.getDouble(0));
                 System.out.println(netHeading.getDouble(0));
