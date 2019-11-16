@@ -8,8 +8,8 @@ import { MenuItem } from "@material-ui/core";
 const SessionSelector: React.FC = () => {
     const [ { sessions, currentSession }, dispatch] = useStateValue();
 
-    function handleOnChange(props: SelectProps) {
-        const sessionName = props.value;
+    function handleOnChange(event: React.ChangeEvent<{ value: unknown }>): void {
+        const sessionName = event.target.value as string;
         // find session in list
         const session = sessions.find(candidate => candidate.name === sessionName);
         if (session) {
