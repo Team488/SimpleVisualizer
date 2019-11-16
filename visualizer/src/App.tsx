@@ -7,6 +7,8 @@ import { getDuration } from './model/Session';
 import SessionSelector from './components/SessionSelector';
 import RawPosePoints from './components/RawPosePoints';
 import TimelineSlider from './components/TimelineSlider';
+import Field from './components/Field';
+import Robot from './components/Robot';
 
 const api = new Api();
 
@@ -39,7 +41,9 @@ const App: React.FC = () => {
       </header>
       <SessionSelector />
       <TimelineSlider />
-      <RawPosePoints />
+      <Field>
+        <Robot />
+      </Field>
     </div>
   );
 }
