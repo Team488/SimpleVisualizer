@@ -14,14 +14,24 @@ const TimelineSlider: React.FC = () => {
     }
 
     return (
-        <div>
+        <div style={{
+            display: 'flex',
+            alignItems: 'center'
+        }}>
             <input 
+                    style={{
+                        flexGrow: 1
+                    }}
                     type="range" 
                     min={0} 
                     max={posePoints.length - 1} 
                     value={playbackIndex}
                     onChange={handleOnChange} />
-            <DurationMarker />
+            <div style={{
+                flexBasis: '70px'
+            }} >
+                <DurationMarker />
+            </div>
         </div>
     );
 }
