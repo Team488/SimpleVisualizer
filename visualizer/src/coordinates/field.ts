@@ -10,7 +10,7 @@ export const fieldScreenXPixels = 800; // eventually should be configurable
 export const fieldScreenYPixels = fieldScreenXPixels * fieldRealXYAspectRatio;
 
 // this defines the XY scale between real and screen
-export const pixelsPerRealInch = fieldRealYInches / fieldScreenXPixels;
+export const pixelsPerRealInch = fieldScreenXPixels / fieldRealYInches;
 
 export function realToScreenPose(pose: RealPose): ScreenPose {
     return new ScreenPose(
