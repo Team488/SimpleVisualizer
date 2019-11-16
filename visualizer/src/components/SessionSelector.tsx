@@ -1,12 +1,15 @@
 import { useStateValue } from "../state/StateContext";
 import { getDuration } from "../model/Session";
+
+import Select, { SelectProps } from '@material-ui/core/Select';
 import React from 'react';
+import { MenuItem } from "@material-ui/core";
 
 const SessionSelector: React.FC = () => {
     const [ { sessions, currentSession }, dispatch] = useStateValue();
 
-    function handleOnChange(event: React.FormEvent<HTMLSelectElement>) {
-        const sessionName = event.currentTarget.value;
+    function handleOnChange(props: SelectProps) {
+        const sessionName = props.value;
         // find session in list
         const session = sessions.find(candidate => candidate.name === sessionName);
         if (session) {
@@ -16,15 +19,15 @@ const SessionSelector: React.FC = () => {
 
     return (
       <div>
-        <select
+        <Select
                 value={currentSession && currentSession.name || ''} 
                 onChange={handleOnChange}>
             {sessions.map(session => {
                 return (
-                    <option key={session.name} value={session.name}>{session.name} - {session.startDateTime.toLocaleString()} - {getDuration(session)}s</option>
+                    <MenuItem key={session.name} value={session.name}>{session.name} - {session.startDateTime.toLocaleString()} - {getDuration(session)}s</MenuItem>
                 );
             })}
-        </select>
+        </Select>
       </div>
     );
   }
