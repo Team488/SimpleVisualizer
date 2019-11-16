@@ -11,11 +11,11 @@ const RawPosePoints: React.FC = () => {
     return (
         <div>
             <h3>{posePoints.length} points</h3>
-            <div>Current point: Heading: {currentPoint.heading}</div>
+            <div>Current point: Heading: {currentPoint.heading.toFixed(3)}</div>
             <ul>
                 {currentPoints.map(point => (
                     <li key={point.time.getTime()}>
-                        Heading: {point.heading}
+                        Heading: {point.heading.toFixed(3)}
                     </li>
                 ))}
             </ul>

@@ -1,14 +1,8 @@
 import React from 'react';
-// import logo from './assets/logo.svg';
-// import './App.css';
-import { StateProvider, useStateValue } from './state/StateContext';
+
+import { useStateValue } from './state/StateContext';
 import Api from './influx-api/Api';
-import { getDuration } from './model/Session';
-import SessionSelector from './components/SessionSelector';
-import RawPosePoints from './components/RawPosePoints';
-import TimelineSlider from './components/TimelineSlider';
-import Field from './components/Field';
-import Robot from './components/Robot';
+import AppLayout from './components/AppLayout';
 
 const api = new Api();
 
@@ -35,17 +29,9 @@ const App: React.FC = () => {
   }, [currentSession]);
 
   return (
-    <div>
-      <header>
-        Visualizer
-      </header>
-      <SessionSelector />
-      <TimelineSlider />
-      <Field>
-        <Robot />
-      </Field>
-    </div>
+    <AppLayout />
   );
 }
+
 
 export default App;
