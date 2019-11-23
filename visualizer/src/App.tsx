@@ -14,7 +14,7 @@ const App: React.FC = () => {
     api.listSessions().then(sessions => {
       dispatch({ type: 'sessions-loaded', payload: sessions });
     })
-  }, []);
+  }, [dispatch]);
   
   // fetch points when current session changes
   React.useEffect(() => {
@@ -26,7 +26,7 @@ const App: React.FC = () => {
     .then(points => {
       dispatch({ type: 'points-loaded', payload: points})
     });
-  }, [currentSession]);
+  }, [currentSession, dispatch]);
 
   return (
     <AppLayout />
