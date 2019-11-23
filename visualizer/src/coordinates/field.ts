@@ -14,8 +14,16 @@ export const pixelsPerRealInch = fieldScreenXPixels / fieldRealYInches;
 
 export function realToScreenPose(pose: RealPose): ScreenPose {
     return new ScreenPose(
-        (pose.y / fieldRealYInches) * pixelsPerRealInch,
-        (pose.x / fieldRealXInches) * pixelsPerRealInch,
+        (pose.y) * pixelsPerRealInch,
+        (pose.x) * pixelsPerRealInch,
         -1 * (pose.heading - 90)
-    )
+    );
+}
+
+export function screenToRealPose(pose: ScreenPose) {
+    return new ScreenPose(
+        (pose.y) / pixelsPerRealInch,
+        (pose.x) / pixelsPerRealInch,
+        -1 * (pose.heading + 90)
+    );
 }
