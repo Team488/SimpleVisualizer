@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { fieldScreenXPixels, fieldScreenYPixels, screenToRealPose } from '../coordinates/field';
 import fieldImg from '../assets/field.jpg';
@@ -111,6 +111,7 @@ const StyledFieldInner = styled.div`
     background-color: #6fd42245;
     width: ${fieldScreenXPixels}px;
     height: ${fieldScreenYPixels}px;
+    cursor: crosshair;
 `;
 
 export default Field;
