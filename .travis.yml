@@ -12,7 +12,7 @@ matrix:
       before_deploy:
       - ./build.sh
     - language: java
-      jdk: oraclejdk8
+      jdk: openjdk8
       before_install: cd RobotReader
       script:
         - gradle build
