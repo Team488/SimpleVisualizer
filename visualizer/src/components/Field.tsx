@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { fieldScreenXPixels, fieldScreenYPixels, screenToRealPose } from '../coordinates/field';
-import fieldImg from '../assets/field.jpg';
+import fieldImg from '../assets/2020field.jpg';
 import { useSpring, animated } from 'react-spring';
 
 // Outter element that wraps the inner field, room for the human stations and the like
@@ -105,8 +105,9 @@ const FloatingTooltip = styled.div`
     border: 3px solid black;
 `;
 
+// margin says how inset from the image does it need to be
 const StyledFieldInner = styled.div`
-    margin: 23px;
+    margin: 23px 42px 23px 39px; 
     position: relative;
     background-color: #6fd42245;
     width: ${fieldScreenXPixels}px;
