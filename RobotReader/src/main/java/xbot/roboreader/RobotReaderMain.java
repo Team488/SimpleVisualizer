@@ -13,6 +13,7 @@ import org.influxdb.dto.QueryResult;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableType;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -64,7 +65,6 @@ public class RobotReaderMain implements Callable<Void>{
         InfluxDB idb = InfluxDBFactory.connect(fullInfluxAddress, "root", "root");
         Pong p = idb.ping();
         System.out.println("influxDb Ping results: " + p.getResponseTime() + "ms");
-
         String poseDbName = "RobotPose";
         String poseDbRetentionPolicy = "RobotPoseRetentionPolicy";
         String poseDbMeasurement = "Pose";
@@ -80,16 +80,32 @@ public class RobotReaderMain implements Callable<Void>{
         while (true) {
             String currentSession = session.getString("NoSessionSetYet");
 
+            // find all the entries in the tables that are of type number
+            NetworkTableEntry[] entries = inst.getEntries("/SmartDashboard", NetworkTableType.kDouble.getValue());
+
             if (debugLogging) {
                 System.out.println(inst.isConnected());
                 System.out.println(currentSession);
                 System.out.println(netX.getDouble(0));
                 System.out.println(netY.getDouble(0));
                 System.out.println(netHeading.getDouble(0));
+                System.out.println("num entries:" + entries.length);
             }
 
             if (inst.isConnected() && currentSession != "NoSessionSetYet") {
-                
+                // write every double
+                for(NetworkTableEntry entry : entries) {
+                    idb.write(
+                        poseDbName, 
+                        poseDbRetentionPolicy,
+                        Point.measurement("AllValues")
+                            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                            .tag("Session", currentSession)
+                            .tag("DashboardKey", entry.getName())
+                            .addField("Value", entry.getDouble(0))
+                            .build());
+                }
+
                 idb.write(poseDbName, poseDbRetentionPolicy, Point.measurement(poseDbMeasurement)
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .tag("Session", currentSession)
