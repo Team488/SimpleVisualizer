@@ -79,9 +79,13 @@ public class RobotReaderMain implements Callable<Void>{
         
         while (true) {
             String currentSession = session.getString("NoSessionSetYet");
+            long currentTimestmap = System.currentTimeMillis();
 
             // find all the entries in the tables that are of type number
-            NetworkTableEntry[] entries = inst.getEntries("/SmartDashboard", NetworkTableType.kDouble.getValue());
+            NetworkTableEntry[] entries = inst.getEntries(
+                "/SmartDashboard", 
+                NetworkTableType.kDouble.getValue()
+            );
 
             if (debugLogging) {
                 System.out.println(inst.isConnected());
@@ -99,15 +103,15 @@ public class RobotReaderMain implements Callable<Void>{
                         poseDbName, 
                         poseDbRetentionPolicy,
                         Point.measurement("AllValues")
-                            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                            .time(currentTimestmap, TimeUnit.MILLISECONDS)
                             .tag("Session", currentSession)
                             .tag("DashboardKey", entry.getName())
-                            .addField("Value", entry.getDouble(0))
+                            .addField("DoubleValue", entry.getDouble(0))
                             .build());
                 }
 
                 idb.write(poseDbName, poseDbRetentionPolicy, Point.measurement(poseDbMeasurement)
-                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .time(currentTimestmap, TimeUnit.MILLISECONDS)
                 .tag("Session", currentSession)
                 .addField("X", netX.getDouble(0))
                 .addField("Y", netY.getDouble(0))
