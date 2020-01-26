@@ -65,15 +65,16 @@ public class RobotReaderMain implements Callable<Void>{
         InfluxDB idb = InfluxDBFactory.connect(fullInfluxAddress, "root", "root");
         Pong p = idb.ping();
         System.out.println("influxDb Ping results: " + p.getResponseTime() + "ms");
-        String poseDbName = "RobotPose";
-        String poseDbRetentionPolicy = "RobotPoseRetentionPolicy";
+        String dbName = "RobotData";
+        String dbRetentionPolicy = "RobotDataRetentionPolicy";
         String poseDbMeasurement = "Pose";
-        System.out.println("Creating/connecting to influxDb database with name: " + poseDbName);
+        String doubleValuesDbMeasurement = "DoubleValues";
+        System.out.println("Creating/connecting to influxDb database with name: " + dbName);
         System.out.println("Writing measurement with name: " + poseDbMeasurement);
 
-        idb.createDatabase(poseDbName);
-        idb.setDatabase(poseDbName);
-        idb.createRetentionPolicy(poseDbRetentionPolicy, poseDbName, "30d", "30m", 2, true);
+        idb.createDatabase(dbName);
+        idb.setDatabase(dbName);
+        idb.createRetentionPolicy(dbRetentionPolicy, dbName, "30d", "30m", 2, true);
 
         idb.enableBatch();
         
@@ -81,7 +82,10 @@ public class RobotReaderMain implements Callable<Void>{
             String currentSession = session.getString("NoSessionSetYet");
             long currentTimestmap = System.currentTimeMillis();
 
-            // find all the entries in the tables that are of type number
+            // find all the entries in the tables that are of type number.
+            // if we don't do this repeatedly we might miss new properties that 
+            // get added after this starts. consider doing it only every N loops if perf is
+            // an issue.
             NetworkTableEntry[] entries = inst.getEntries(
                 "/SmartDashboard", 
                 NetworkTableType.kDouble.getValue()
@@ -100,23 +104,27 @@ public class RobotReaderMain implements Callable<Void>{
                 // write every double
                 for(NetworkTableEntry entry : entries) {
                     idb.write(
-                        poseDbName, 
-                        poseDbRetentionPolicy,
-                        Point.measurement("AllValues")
+                        dbName, 
+                        dbRetentionPolicy,
+                        Point.measurement(doubleValuesDbMeasurement)
                             .time(currentTimestmap, TimeUnit.MILLISECONDS)
                             .tag("Session", currentSession)
                             .tag("DashboardKey", entry.getName())
-                            .addField("DoubleValue", entry.getDouble(0))
+                            .addField("Value", entry.getDouble(0))
                             .build());
                 }
 
-                idb.write(poseDbName, poseDbRetentionPolicy, Point.measurement(poseDbMeasurement)
-                .time(currentTimestmap, TimeUnit.MILLISECONDS)
-                .tag("Session", currentSession)
-                .addField("X", netX.getDouble(0))
-                .addField("Y", netY.getDouble(0))
-                .addField("Heading", netHeading.getDouble(0))
-                .build());
+                // write pose
+                idb.write(
+                    dbName, 
+                    dbRetentionPolicy, 
+                    Point.measurement(poseDbMeasurement)
+                        .time(currentTimestmap, TimeUnit.MILLISECONDS)
+                        .tag("Session", currentSession)
+                        .addField("X", netX.getDouble(0))
+                        .addField("Y", netY.getDouble(0))
+                        .addField("Heading", netHeading.getDouble(0))
+                        .build());
 
                 idb.flush();
             }
