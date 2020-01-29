@@ -2,7 +2,8 @@ import { InfluxDB } from 'influx';
 import Session from '../model/Session';
 import PosePoint from '../model/PosePoint';
 
-const dbName = 'RobotPose';
+const dbName = 'RobotData';
+const rentetionPolicy = 'RobotDataRetentionPolicy';
 
 interface RawPosePoint {
     X: number,
@@ -23,7 +24,7 @@ export default class Api {
     async fetchLatestPosition() {
         return this.influx.query(`
             select X, Y, Heading 
-            from "RobotPoseRetentionPolicy"."Pose"
+            from "${rentetionPolicy}"."Pose"
             ORDER BY DESC
             limit 1
         `).then( (results) => {
@@ -37,7 +38,7 @@ export default class Api {
         const commonMeasurement = 'X'; // needs to be on every event we care about
         const startResults = await this.influx.query(`
             SELECT first(${commonMeasurement}), time 
-            FROM "RobotPoseRetentionPolicy"."Pose"
+            FROM "${rentetionPolicy}"."Pose"
             GROUP BY "Session"
         `);
         const starts = new Map(startResults.map((result: any) => {
@@ -46,7 +47,7 @@ export default class Api {
 
         const endResults = await this.influx.query(`
             SELECT last(${commonMeasurement}), time 
-            FROM "RobotPoseRetentionPolicy"."Pose"
+            FROM "${rentetionPolicy}"."Pose"
             GROUP BY "Session"
         `);
         const ends = new Map(endResults.map((result: any) => {
@@ -69,7 +70,7 @@ export default class Api {
     async getPointsForSession(sessionName: string): Promise<PosePoint[]> {
         const results = await this.influx.query(`
             SELECT X, Y, Heading 
-            FROM "RobotPoseRetentionPolicy"."Pose"
+            FROM "${rentetionPolicy}"."Pose"
             WHERE Session = '${sessionName}'
             ORDER BY ASC
         `);
