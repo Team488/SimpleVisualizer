@@ -37,3 +37,13 @@ task jarSources(type:Jar){
     from sourceSets.main.allSource
     classifier = 'source'
 }
+
+jar {
+    manifest {
+        attributes "Main-Class": "xbot.roboreader.RobotReaderMain"
+    }
+ 
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

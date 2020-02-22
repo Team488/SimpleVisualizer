@@ -17,6 +17,7 @@ export default class Api {
     constructor(influx?: InfluxDB) {
         this.influx = influx ||  new InfluxDB({
             database: dbName
+            // host: '10.4.88.227' // driver station static ip
         });;
     }
 
