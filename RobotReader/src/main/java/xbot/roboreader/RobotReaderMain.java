@@ -103,6 +103,9 @@ public class RobotReaderMain implements Callable<Void>{
                 for(NetworkTableEntry entry : entries) {
                     // strip the /SmartDashboard/ prefix from the entry names, they're on everything and not helpful
                     String name = entry.getName().substring(16);
+                    String[] parts = name.split("/", 2);
+                    String prefix = parts[0];
+                    String suffix = parts[parts.length - 1];
 
                     idb.write(
                         dbName, 
@@ -110,7 +113,9 @@ public class RobotReaderMain implements Callable<Void>{
                         Point.measurement(doubleValuesDbMeasurement)
                             .time(currentTimestmap, TimeUnit.MILLISECONDS)
                             .tag("Session", currentSession)
-                            .tag("DashboardKey", name)
+                            .tag("Prop", name)
+                            .tag("PropPrefix", prefix)
+                            .tag("PropSuffix", suffix)
                             .addField("Value", entry.getDouble(0))
                             .build());
                 }
