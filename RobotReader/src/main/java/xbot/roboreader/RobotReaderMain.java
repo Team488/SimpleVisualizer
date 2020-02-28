@@ -101,13 +101,16 @@ public class RobotReaderMain implements Callable<Void>{
             if (inst.isConnected() && currentSession != "NoSessionSetYet") {
                 // write every double
                 for(NetworkTableEntry entry : entries) {
+                    // strip the /SmartDashboard/ prefix from the entry names, they're on everything and not helpful
+                    String name = entry.getName().substring(16);
+
                     idb.write(
                         dbName, 
                         dbRetentionPolicy,
                         Point.measurement(doubleValuesDbMeasurement)
                             .time(currentTimestmap, TimeUnit.MILLISECONDS)
                             .tag("Session", currentSession)
-                            .tag("DashboardKey", entry.getName())
+                            .tag("DashboardKey", name)
                             .addField("Value", entry.getDouble(0))
                             .build());
                 }
