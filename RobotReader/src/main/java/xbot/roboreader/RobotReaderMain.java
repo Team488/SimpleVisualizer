@@ -84,9 +84,14 @@ public class RobotReaderMain implements Callable<Void>{
             // if we don't do this repeatedly we might miss new properties that 
             // get added after this starts. consider doing it only every N loops if perf is
             // an issue.
-            NetworkTableEntry[] entries = inst.getEntries(
+            NetworkTableEntry[] doubleEntries = inst.getEntries(
                 "/SmartDashboard", 
                 NetworkTableType.kDouble.getValue()
+            );
+
+            NetworkTableEntry[] booleanEntries = inst.getEntries(
+                "/SmartDashboard", 
+                NetworkTableType.kBoolean.getValue()
             );
 
             if (debugLogging) {
@@ -95,12 +100,12 @@ public class RobotReaderMain implements Callable<Void>{
                 System.out.println(netX.getDouble(0));
                 System.out.println(netY.getDouble(0));
                 System.out.println(netHeading.getDouble(0));
-                System.out.println("num entries:" + entries.length);
+                System.out.println("num entries:" + doubleEntries.length);
             }
 
             if (inst.isConnected() && currentSession != "NoSessionSetYet") {
                 // write every double
-                for(NetworkTableEntry entry : entries) {
+                for(NetworkTableEntry entry : doubleEntries) {
                     // strip the /SmartDashboard/ prefix from the entry names, they're on everything and not helpful
                     String name = entry.getName().substring(16);
                     String[] parts = name.split("/", 2);
@@ -117,6 +122,27 @@ public class RobotReaderMain implements Callable<Void>{
                             .tag("PropPrefix", prefix)
                             .tag("PropSuffix", suffix)
                             .addField("Value", entry.getDouble(0))
+                            .build());
+                }
+
+                // write every boolean
+                for(NetworkTableEntry entry : booleanEntries) {
+                    // strip the /SmartDashboard/ prefix from the entry names, they're on everything and not helpful
+                    String name = entry.getName().substring(16);
+                    String[] parts = name.split("/", 2);
+                    String prefix = parts[0];
+                    String suffix = parts[parts.length - 1];
+
+                    idb.write(
+                        dbName, 
+                        dbRetentionPolicy,
+                        Point.measurement(doubleValuesDbMeasurement)
+                            .time(currentTimestmap, TimeUnit.MILLISECONDS)
+                            .tag("Session", currentSession)
+                            .tag("Prop", name)
+                            .tag("PropPrefix", prefix)
+                            .tag("PropSuffix", suffix)
+                            .addField("Value", entry.getBoolean(false) ? 1.0 : 0.0)
                             .build());
                 }
 
